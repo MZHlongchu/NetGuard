@@ -36,7 +36,7 @@ jobs:
         uses: android-actions/setup-android@v2
         
       - name: Setup Android NDK
-        uses: android-actions/setup-android-ndk@v2
+        uses: urcomputermagic/setup-android-ndk@v1
         with:
           ndk-version: '25.2.9519653'
       
@@ -196,4 +196,3 @@ jobs:
           name: NetGuard-all-apks
           path: app/build/outputs/apk/**/*.apk
           retention-days: 7
-

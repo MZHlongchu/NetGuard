@@ -1,11 +1,14 @@
-name: Build ARM64-V8A Release APK
+name: Build ARM64-V8A Release
 
 on:
-  push:
-    branches: [ master, main, feat_pro ]
-  pull_request:
-    branches: [ master, main ]
   workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
 
 jobs:
   build:

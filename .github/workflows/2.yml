@@ -1,4 +1,4 @@
-name: Build ARM64-V8A Release
+name: Build ARM64-V8A Release APK
 
 on:
   workflow_dispatch:
@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: write
-
 
 jobs:
   build:
@@ -39,9 +38,12 @@ jobs:
         uses: android-actions/setup-android@v2
         
       - name: Setup Android NDK
-        uses: urcomputermagic/setup-android-ndk@v1
-        with:
-          ndk-version: '25.2.9519653'
+        run: |
+          # Install NDK using sdkmanager
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1 || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;25.2.9519653"
+          echo "NDK installed successfully"
+          ls -la $ANDROID_HOME/ndk/
       
       - name: Prepare signing config
         run: |

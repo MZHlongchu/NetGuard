@@ -180,20 +180,7 @@ public class IAB implements ServiceConnection {
     }
 
     public static boolean isPurchasedAny(Context context) {
-        try {
-            if (Util.isDebuggable(context)) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                return !(prefs.getBoolean("debug_iab", false));
-            }
-
-            SharedPreferences prefs = context.getSharedPreferences("IAB", Context.MODE_PRIVATE);
-            for (String key : prefs.getAll().keySet())
-                if (prefs.getBoolean(key, false))
-                    return true;
-            return false;
-        } catch (SecurityException ignored) {
-            return false;
-        }
+        return true;
     }
 
     public static String getResult(int responseCode) {

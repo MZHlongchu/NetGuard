@@ -374,7 +374,7 @@ Your internet traffic is not being sent to a remote VPN server.</string>
     </string-array>
 
     <string name="fingerprint" translatable="false">ef46f813d2c8a064d72c936b9b96d1cccc989378</string>
-</resources>
+
 
     <!-- Virtual Hosts -->
     <string name="title_virtual_hosts">Virtual Hosts</string>
@@ -421,3 +421,4 @@ Your internet traffic is not being sent to a remote VPN server.</string>
     <string name="setting_vhosts_interval_weekly">Weekly</string>
     <string name="setting_vhosts_interval_monthly">Monthly</string>
     <string name="setting_vhosts_manage">Manage Virtual Hosts</string>
+</resources>

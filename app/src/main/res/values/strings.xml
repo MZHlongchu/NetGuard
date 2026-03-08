@@ -387,7 +387,7 @@ Your internet traffic is not being sent to a remote VPN server.</string>
     <string name="title_cancel">Cancel</string>
     <string name="title_delete">Delete</string>
     <string name="title_clear">Clear</string>
-    <string name="title_download_hosts">Download</string>
+    <!-- <string name="title_download_hosts">Download</string> -->
     <string name="title_edit">Edit</string>
     
     <string name="hint_domain">Domain (e.g., github.com)</string>

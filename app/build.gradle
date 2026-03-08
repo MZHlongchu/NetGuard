@@ -94,6 +94,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    // 确保添加 CardView 依赖
+    implementation 'androidx.cardview:cardview1.0.0'
+
     // https://developer.android.com/jetpack/androidx/releases/
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'

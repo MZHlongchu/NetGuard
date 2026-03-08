@@ -409,8 +409,8 @@ Your internet traffic is not being sent to a remote VPN server.</string>
     <string name="msg_host_updated">Host updated</string>
     <string name="msg_host_deleted">Host deleted</string>
     <string name="msg_invalid_input">Invalid input</string>
-    <string name="msg_error">Error</string>
-    <string name="msg_completed">Completed</string>
+    <!-- <string name="msg_error">Error</string> -->
+    <!-- <string name="msg_completed">Completed</string> -->
     
     <!-- Virtual Hosts Settings -->
     <string name="setting_vhosts">Virtual Hosts</string>

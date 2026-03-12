@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.SwitchCompat;
 
 public class AdapterVirtualHosts extends CursorAdapter {
-    private final int colId;
+    private final int colId; // _id
     private final int colHostname;
     private final int colIp;
     private final int colEnabled;
@@ -20,7 +20,7 @@ public class AdapterVirtualHosts extends CursorAdapter {
 
     public AdapterVirtualHosts(Context context, Cursor cursor) {
         super(context, cursor, 0);
-        colId = cursor.getColumnIndex("ID");
+        colId = cursor.getColumnIndex("_id");
         colHostname = cursor.getColumnIndex("hostname");
         colIp = cursor.getColumnIndex("ip");
         colEnabled = cursor.getColumnIndex("enabled");

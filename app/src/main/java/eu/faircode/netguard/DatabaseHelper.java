@@ -1257,7 +1257,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         lock.readLock().lock();
         try {
             SQLiteDatabase db = this.getReadableDatabase();
-            return db.query("virtual_hosts", null, null, null, null, null, "hostname");
+            // Include _id column for CursorAdapter compatibility
+            String[] columns = new String[]{"ID as _id", "hostname", "ip", "enabled", "source", "time"};
+            return db.query("virtual_hosts", columns, null, null, null, null, "hostname");
         } finally {
             lock.readLock().unlock();
         }

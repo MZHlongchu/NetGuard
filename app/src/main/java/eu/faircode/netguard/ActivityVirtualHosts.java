@@ -97,28 +97,44 @@ public class ActivityVirtualHosts extends AppCompatActivity {
     }
 
     private void showAddDialog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.virtual_host_add, null);
-        final EditText etHostname = view.findViewById(R.id.etHostname);
-        final EditText etIp = view.findViewById(R.id.etIp);
+        try {
+            View view = LayoutInflater.from(this).inflate(R.layout.virtual_host_add, null);
+            final EditText etHostname = view.findViewById(R.id.etHostname);
+            final EditText etIp = view.findViewById(R.id.etIp);
 
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.vhost_add_title)
-                .setView(view)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String hostname = etHostname.getText().toString().trim();
-                        String ip = etIp.getText().toString().trim();
-                        if (hostname.length() > 0 && ip.length() > 0) {
-                            DatabaseHelper.getInstance(ActivityVirtualHosts.this)
-                                    .insertVirtualHost(hostname, ip, true, "manual");
-                            updateAdapter();
-                            ServiceSinkhole.reload("virtual hosts", ActivityVirtualHosts.this, false);
+            // Check if views are null
+            if (etHostname == null || etIp == null) {
+                Toast.makeText(this, "Error: Could not load dialog views", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.vhost_add_title)
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                String hostname = etHostname.getText().toString().trim();
+                                String ip = etIp.getText().toString().trim();
+                                if (hostname.length() > 0 && ip.length() > 0) {
+                                    DatabaseHelper.getInstance(ActivityVirtualHosts.this)
+                                            .insertVirtualHost(hostname, ip, true, "manual");
+                                    updateAdapter();
+                                    ServiceSinkhole.reload("virtual hosts", ActivityVirtualHosts.this, false);
+                                }
+                            } catch (Throwable ex) {
+                                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+                                Toast.makeText(ActivityVirtualHosts.this, "Error adding host: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+        } catch (Throwable ex) {
+            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+            Toast.makeText(this, "Error showing dialog: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateFromGitHub520() {

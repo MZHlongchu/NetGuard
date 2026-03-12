@@ -1692,23 +1692,36 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
     }
 
     private void prepareVirtualHosts() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSinkhole.this);
-        boolean use_virtual_hosts = prefs.getBoolean("use_virtual_hosts", false);
-        if (!use_virtual_hosts) {
-            lock.writeLock().lock();
-            mapHostsRedirect.clear();
-            lock.writeLock().unlock();
-            return;
-        }
-
-        lock.writeLock().lock();
         try {
-            mapHostsRedirect.clear();
-            Map<String, String> hosts = DatabaseHelper.getInstance(ServiceSinkhole.this).getEnabledVirtualHosts();
-            mapHostsRedirect.putAll(hosts);
-            Log.i(TAG, mapHostsRedirect.size() + " virtual hosts loaded");
-        } finally {
-            lock.writeLock().unlock();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSinkhole.this);
+            boolean use_virtual_hosts = prefs.getBoolean("use_virtual_hosts", false);
+            if (!use_virtual_hosts) {
+                lock.writeLock().lock();
+                mapHostsRedirect.clear();
+                lock.writeLock().unlock();
+                return;
+            }
+
+            lock.writeLock().lock();
+            try {
+                mapHostsRedirect.clear();
+                DatabaseHelper dbHelper = DatabaseHelper.getInstance(ServiceSinkhole.this);
+                if (dbHelper != null) {
+                    Map<String, String> hosts = dbHelper.getEnabledVirtualHosts();
+                    if (hosts != null) {
+                        mapHostsRedirect.putAll(hosts);
+                        Log.i(TAG, mapHostsRedirect.size() + " virtual hosts loaded");
+                    } else {
+                        Log.w(TAG, "getEnabledVirtualHosts returned null");
+                    }
+                } else {
+                    Log.w(TAG, "DatabaseHelper.getInstance returned null");
+                }
+            } finally {
+                lock.writeLock().unlock();
+            }
+        } catch (Throwable ex) {
+            Log.e(TAG, "prepareVirtualHosts error: " + ex.toString() + "\n" + Log.getStackTraceString(ex));
         }
     }
 
@@ -2038,19 +2051,36 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
     // Called from native code
     private boolean isDomainBlocked(String name) {
-        lock.readLock().lock();
-        boolean blocked = (mapHostsBlocked.containsKey(name) && mapHostsBlocked.get(name));
-        lock.readLock().unlock();
-        return blocked;
+        try {
+            lock.readLock().lock();
+            try {
+                if (mapHostsBlocked == null)
+                    return false;
+                Boolean blocked = mapHostsBlocked.get(name);
+                return blocked != null && blocked;
+            } finally {
+                lock.readLock().unlock();
+            }
+        } catch (Throwable ex) {
+            Log.e(TAG, "isDomainBlocked error: " + ex.toString() + "\n" + Log.getStackTraceString(ex));
+            return false;
+        }
     }
 
     // Called from native code
     private String getHostRedirect(String name) {
-        lock.readLock().lock();
         try {
-            return mapHostsRedirect.get(name);
-        } finally {
-            lock.readLock().unlock();
+            lock.readLock().lock();
+            try {
+                if (mapHostsRedirect == null)
+                    return null;
+                return mapHostsRedirect.get(name);
+            } finally {
+                lock.readLock().unlock();
+            }
+        } catch (Throwable ex) {
+            Log.e(TAG, "getHostRedirect error: " + ex.toString() + "\n" + Log.getStackTraceString(ex));
+            return null;
         }
     }
 

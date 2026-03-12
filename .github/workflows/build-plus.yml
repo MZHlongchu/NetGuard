@@ -1,0 +1,49 @@
+name: Build Plus (All ABIs with Virtual Hosts)
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "pro-plus*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches,~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*gradle-wrapper.properties') }}
+      - uses: android-actions/setup-android@v2
+      - name: NDK
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;25.2.9519653"
+      - name: Sign
+        run: |
+          [ -n "${{ secrets.KEY_BASE64 }}" ] && echo "${{ secrets.KEY_BASE64 }}"|base64 -d>app/app.key||true
+          [ -n "${{ secrets.SIGNING_CONFIG }}" ] && echo "${{ secrets.SIGNING_CONFIG }}" > local.properties || true
+      - name: Check VHost files
+        run: |
+          for f in app/src/main/jni/netguard/netguard.h app/src/main/jni/netguard/netguard.c app/src/main/jni/netguard/dns.c; do
+            grep -q get_host_redirect "$f" && echo OK:$f || echo MISSING:$f
+          done
+          for f in app/src/main/java/eu/faircode/netguard/ActivityVirtualHosts.java app/src/main/res/layout/virtual_hosts.xml; do
+            [ -f "$f" ] && echo OK:$f || echo MISSING:$f
+          done
+      - name: Build
+        run: chmod +x gradlew && ./gradlew assembleRelease --no-daemon -x lint
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plus-release
+          path: app/build/outputs/apk/**/*release*.apk
+          retention-days: 30

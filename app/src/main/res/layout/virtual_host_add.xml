@@ -5,30 +5,36 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/etHostname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/vhost_hostname_hint"
-            android:inputType="textUri"
-            android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:text="@string/vhost_hostname_hint"
+        android:textAppearance="?attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary" />
 
-        <EditText
-            android:id="@+id/etIp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/vhost_ip_hint"
-            android:inputType="phone"
-            android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <EditText
+        android:id="@+id/etHostname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/vhost_hostname_hint"
+        android:inputType="textUri"
+        android:singleLine="true"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/vhost_ip_hint"
+        android:textAppearance="?attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary" />
+
+    <EditText
+        android:id="@+id/etIp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/vhost_ip_hint"
+        android:inputType="phone"
+        android:singleLine="true"
+        android:padding="8dp" />
 </LinearLayout>

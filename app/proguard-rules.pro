@@ -1,7 +1,7 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
 # in /home/marcel/Android/Sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
+# You can edit the include path and order by changing the proGuardFiles
 # directive in build.gradle.
 #
 # For more details, see
@@ -39,6 +39,7 @@
     void logPacket(eu.faircode.netguard.Packet);
     void dnsResolved(eu.faircode.netguard.ResourceRecord);
     boolean isDomainBlocked(java.lang.String);
+    java.lang.String getHostRedirect(java.lang.String);
     int getUidQ(int, int, java.lang.String, int, java.lang.String, int);
     eu.faircode.netguard.Allowed isAddressAllowed(eu.faircode.netguard.Packet);
     void accountUsage(eu.faircode.netguard.Usage);

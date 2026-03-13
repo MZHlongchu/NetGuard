@@ -737,6 +737,8 @@ void get_host_redirect(const struct arguments *args, const char *name, char *red
         log_android(ANDROID_LOG_INFO, "Host redirect %s -> %s", name, redirect);
 }
 
+static jmethodID midGetUidQ = NULL;
+
 jint get_uid_q(const struct arguments *args,
                jint version, jint protocol,
                const char *source, jint sport,

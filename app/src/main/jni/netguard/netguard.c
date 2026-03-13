@@ -704,6 +704,13 @@ void get_host_redirect(const struct arguments *args, const char *name, char *red
     if (midGetHostRedirect == NULL)
         midGetHostRedirect = jniGetMethodID(args->env, clsService, "getHostRedirect", signature);
 
+    if (midGetHostRedirect == NULL) {
+        log_android(ANDROID_LOG_ERROR, "getHostRedirect method not found");
+        (*args->env)->DeleteLocalRef(args->env, clsService);
+        ng_delete_alloc(clsService, __FILE__, __LINE__);
+        return;
+    }
+
     jstring jname = (*args->env)->NewStringUTF(args->env, name);
     ng_add_alloc(jname, "jname");
 
@@ -729,8 +736,6 @@ void get_host_redirect(const struct arguments *args, const char *name, char *red
     if (*redirect)
         log_android(ANDROID_LOG_INFO, "Host redirect %s -> %s", name, redirect);
 }
-
-static jmethodID midGetUidQ = NULL;
 
 jint get_uid_q(const struct arguments *args,
                jint version, jint protocol,

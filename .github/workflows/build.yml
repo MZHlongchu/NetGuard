@@ -154,11 +154,14 @@ jobs:
           EOF
           
           echo "Modified build.gradle to build only arm64-v8a"
-      
+          
+        
       - name: Build ARM64-V8A Release APK
         run: |
           # Make gradlew executable
           chmod +x gradlew
+          
+          ./gradlew clean
           
           # Use the arm64-v8a specific build configuration
           ./gradlew assembleRelease \
